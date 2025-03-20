@@ -366,6 +366,15 @@
     (when (setting/get :send-new-sso-user-admin-email?)
       ((requiring-resolve 'metabase.channel.email.messages/send-user-joined-admin-notification-email!) <>, :google-auth? true))))
 
+(mu/defn create-new-token-auth-user!
+  "Convenience for creating a new user via token Auth. This account is considered active immediately; thus all active
+  admins will receive an email right away."
+  [new-user :- NewUser]
+  (u/prog1 (insert-new-user! (assoc new-user :sso_source "token"))
+           ;; send an email to everyone including the site admin if that's set
+           (when (setting/get :send-new-sso-user-admin-email?)
+             ((requiring-resolve 'metabase.channel.email.messages/send-user-joined-admin-notification-email!) <>, :google-auth? true))))
+
 ;;; TODO -- this should probably be moved into [[metabase.sso.ldap]]
 (mu/defn create-new-ldap-auth-user!
   "Convenience for creating a new user via LDAP. This account is considered active immediately; thus all active admins

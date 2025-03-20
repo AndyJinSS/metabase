@@ -3,6 +3,7 @@
    [metabase.sso.common]
    [metabase.sso.google]
    [metabase.sso.ldap]
+   [metabase.sso.token]
    [metabase.sso.ldap.default-implementation]
    [metabase.sso.settings]
    [potemkin :as p]))
@@ -13,6 +14,9 @@
  [metabase.sso.google
   do-google-auth
   google-auth-create-new-user!]
+ [metabase.sso.token
+  do-token-auth
+  token-auth-create-new-user!]
  [metabase.sso.ldap.default-implementation
   LDAPSettings
   ldap-groups->mb-group-ids

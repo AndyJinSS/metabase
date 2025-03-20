@@ -304,6 +304,33 @@
         (throttle/with-throttling [(login-throttlers :ip-address) (request/ip-address request)]
           (do-login))))))
 
+(api.macros/defendpoint :post "/token"
+  "Login with jwt token"
+  [_route-params
+   _query-params
+   _body :- [:map
+             [:token ms/NonBlankString]]
+   request]
+  ;; Verify the token is valid with Google
+  (letfn [(do-login []
+            (let [user (sso/do-token-auth request)
+                  {session-key :key, :as session} (session/create-session! :sso user (request/device-info request))
+                  response {:id (str session-key)}
+                  user (t2/select-one [:model/User :id :is_active], :email (:email user))]
+              (if (and user (:is_active user))
+                (request/set-session-cookies request
+                                             response
+                                             session
+                                             (t/zoned-date-time (t/zone-id "GMT")))
+                (throw (ex-info (str disabled-account-message)
+                                {:status-code 401
+                                 :errors      {:account disabled-account-snippet}})))))]
+    (http-401-on-error
+      (if throttling-disabled?
+        (do-login)
+        (throttle/with-throttling [(login-throttlers :ip-address) (request/ip-address request)]
+          (do-login))))))
+
 (defn- +log-all-request-failures [handler]
   (open-api/handler-with-open-api-spec
    (fn [request respond raise]

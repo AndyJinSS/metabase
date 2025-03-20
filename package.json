@@ -434,7 +434,6 @@
     "lint-prettier-pure": "prettier --check '{frontend,enterprise/frontend,e2e}/**/*.{js,jsx,ts,tsx,css}'",
     "lint-yaml": "yamllint **/*.{yaml,yml} --ignore=node_modules/**/*.{yaml,yml}",
     "postinstall": "yarn yarn-deduplicate --scopes @babel && patch-package",
-    "precommit": "lint-staged --shell",
     "preinstall": "echo $npm_execpath | grep -q yarn || echo '\\033[0;33mSorry, npm is not supported. Please use Yarn (https://yarnpkg.com/).\\033[0m'",
     "prepare": "husky install",
     "prettier": "prettier --write '{frontend,enterprise/frontend,e2e}/**/*.{js,jsx,ts,tsx,css}'",
@@ -461,33 +460,6 @@
     "wait:cljs": "echo Waiting for first CLJS build; until [ -f target/cljs_dev/cljs.core.js ]; do sleep 1; done; echo CLJS build done",
     "generate:expression-parser": "lezer-generator frontend/src/metabase-lib/v1/expressions/tokenizer/grammar.lezer -o frontend/src/metabase-lib/v1/expressions/tokenizer/lezer.js",
     "cloud:dev": "yarn && clojure -A:dev:drivers:drivers-dev:ee:ee-dev:cljs -P && yarn concurrently -n 'FE,BE' -c 'blue,green' 'yarn build-hot' 'clojure -M:dev:socket:dev-start:drivers:drivers-dev:ee:ee-dev'"
-  },
-  "lint-staged": {
-    "+(frontend|enterprise)/**/*.styled.tsx": [
-      "stylelint --customSyntax postcss-styled-syntax --fix"
-    ],
-    "+(frontend|enterprise/frontend|e2e)/**/*.css": [
-      "stylelint --fix",
-      "prettier --write"
-    ],
-    "+(frontend|enterprise/frontend)/**/*.{js,jsx,ts,tsx}": [
-      "LINT_CSS_MODULES=true eslint --rulesdir frontend/lint/eslint-rules --max-warnings 0 --fix",
-      "prettier --write",
-      "node ./bin/verify-doc-links"
-    ],
-    "e2e/**/*.{js,jsx,ts,jsx}": [
-      "eslint --rulesdir frontend/lint/eslint-rules --max-warnings 0 --fix",
-      "prettier --write"
-    ],
-    "**/*.{clj,cljc,cljs,bb}": [
-      "./bin/cljfmt_staged.sh"
-    ],
-    "e2e/test/scenarios/*/{*.(js|ts),!(helpers|shared)/*.(js|ts)}": [
-      "node e2e/validate-e2e-test-files.js"
-    ],
-    "enterprise/frontend/src/embedding-sdk/README.md": [
-      "prettier --write"
-    ]
   },
   "browserslist": [
     "defaults"
