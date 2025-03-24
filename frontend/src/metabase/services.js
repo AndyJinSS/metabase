@@ -545,3 +545,7 @@ export const CacheConfigApi = {
   delete: DELETE("/api/cache"),
   invalidate: POST("/api/cache/invalidate"),
 };
+
+export const TokenAuthApi = {
+  loginWithToken: POST("/api/session/token"),
+};

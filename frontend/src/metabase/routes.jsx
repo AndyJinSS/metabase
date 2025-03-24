@@ -5,6 +5,7 @@ import App from "metabase/App.tsx";
 import getAccountRoutes from "metabase/account/routes";
 import CollectionPermissionsModal from "metabase/admin/permissions/components/CollectionPermissionsModal/CollectionPermissionsModal";
 import getAdminRoutes from "metabase/admin/routes";
+import getSSORoutes from "metabase/sso/routes";
 import { ForgotPassword } from "metabase/auth/components/ForgotPassword";
 import { Login } from "metabase/auth/components/Login";
 import { Logout } from "metabase/auth/components/Logout";
@@ -74,6 +75,8 @@ export const getRoutes = store => {
 
   return (
     <Route title={applicationName} component={App}>
+
+      {getSSORoutes()}
       {/* SETUP */}
       <Route
         path="/setup"
