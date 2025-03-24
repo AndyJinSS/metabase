@@ -211,6 +211,7 @@ export const tokenFeatures = [
   "sso_jwt",
   "sso_ldap",
   "sso_saml",
+  "sso_token",
   "session_timeout_config",
   "whitelabel",
   "serialization",
@@ -308,6 +309,7 @@ interface AdminSettings {
   "query-caching-ttl-ratio": number;
   "google-auth-auto-create-accounts-domain": string | null;
   "google-auth-configured": boolean;
+  "token-auth-configured": boolean;
   "jwt-configured"?: boolean;
   "jwt-enabled"?: boolean;
   "premium-embedding-token": string | null;
@@ -367,6 +369,8 @@ interface PublicSettings {
   engines: Record<string, Engine>;
   "google-auth-client-id": string | null;
   "google-auth-enabled": boolean;
+  "token-auth-sso-url": string | null;
+  "token-auth-enabled": boolean;
   gsheets: {
     status: "not-connected" | "loading" | "complete" | "error";
     folder_url: string | null;

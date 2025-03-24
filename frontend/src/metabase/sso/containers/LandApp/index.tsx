@@ -30,6 +30,7 @@ const SSOLandingPage = (props: any) => {
           props.onChangeLocation(url);
         })
         .catch(error => {
+          console.log(error)
           props.onChangeLocation('/login');
           setStatus(false)
         });

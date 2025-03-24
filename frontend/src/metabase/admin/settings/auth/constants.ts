@@ -21,6 +21,10 @@ export const GOOGLE_SCHEMA = Yup.object({
     .default(null),
 });
 
+export const SSO_TOKEN_SCHEMA = Yup.object({
+  "token-auth-sso-url": Yup.string().nullable().default(null),
+});
+
 export const LDAP_SCHEMA = Yup.object({
   ...PLUGIN_LDAP_FORM_FIELDS.formFieldsSchemas,
   "ldap-enabled": Yup.boolean().nullable().default(false),

@@ -207,3 +207,38 @@
 (define-multi-setting-impl send-new-sso-user-admin-email? :oss
   :getter (constantly true)
   :setter :none)
+
+
+;;;
+;;; SSO Token Auth
+;;;
+
+(defsetting token-auth-sso-url
+  (deferred-tru "Token auth server url")
+  :encryption :when-encryption-key-set
+  :visibility :public
+  :audit      :getter
+  :setter     (fn [sso-url]
+                (if (seq sso-url)
+                  (let [trimmed-sso-url (str/trim sso-url)]
+                    (setting/set-value-of-type! :string :token-auth-sso-url trimmed-sso-url))
+                  (do
+                    (setting/set-value-of-type! :string :token-auth-sso-url nil)
+                    (setting/set-value-of-type! :boolean :token-auth-enabled false)))))
+
+(defsetting token-auth-enabled
+  (deferred-tru "Is SSO token currently enabled?")
+  :visibility :public
+  :type       :boolean
+  :audit      :getter
+  :getter     (fn []
+                (if-some [value (setting/get-value-of-type :boolean :token-auth-enabled)]
+                  value
+                  (boolean (token-auth-sso-url))))
+  :setter     (fn [new-value]
+                (if-let [new-value (boolean new-value)]
+                  (if-not (token-auth-sso-url)
+                    (throw (ex-info (tru "Token auth server url is not configured. Please set the Server Url first.")
+                                    {:status-code 400}))
+                    (setting/set-value-of-type! :boolean :token-auth-enabled new-value))
+                  (setting/set-value-of-type! :boolean :token-auth-enabled new-value))))

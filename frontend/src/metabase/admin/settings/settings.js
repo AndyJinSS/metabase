@@ -11,7 +11,7 @@ import {
   LdapApi,
   SamlApi,
   SettingsApi,
-  SlackApi,
+  SlackApi, TokenApi,
 } from "metabase/services";
 
 // ACTION TYPES AND ACTION CREATORS
@@ -170,6 +170,19 @@ export const updateGoogleSettings = createThunkAction(
   function (settings) {
     return async function (dispatch) {
       const result = await GoogleApi.updateSettings(settings);
+      await dispatch(reloadSettings());
+      return result;
+    };
+  },
+);
+
+export const UPDATE_SSO_TOKEN_SETTINGS =
+  "metabase/admin/settings/UPDATE_TOKEN_SETTINGS";
+export const updateSSOTokenSettings = createThunkAction(
+  UPDATE_SSO_TOKEN_SETTINGS,
+  function (settings) {
+    return async function (dispatch) {
+      const result = await TokenApi.updateSettings(settings);
       await dispatch(reloadSettings());
       return result;
     };

@@ -270,6 +270,9 @@ export const SamlApi = {
 export const GoogleApi = {
   updateSettings: PUT("/api/google/settings"),
 };
+export const TokenApi = {
+  updateSettings: PUT("/api/token/settings"),
+};
 
 export const MetabaseApi = {
   db_autocomplete_suggestions: GET(
