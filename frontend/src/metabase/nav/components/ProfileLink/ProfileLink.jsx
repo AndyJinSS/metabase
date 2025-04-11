@@ -9,6 +9,7 @@ import {
   getIsOnboardingSidebarLinkDismissed,
 } from "metabase/admin/app/selectors";
 import { useSetting } from "metabase/common/hooks";
+import { ConfirmModal } from "metabase/components/ConfirmModal";
 import EntityMenu from "metabase/components/EntityMenu";
 import { ErrorDiagnosticModalWrapper } from "metabase/components/ErrorPages/ErrorDiagnosticModal";
 import { trackErrorDiagnosticModalOpened } from "metabase/components/ErrorPages/analytics";
@@ -55,6 +56,7 @@ function ProfileLink({
   openDiagnostics,
 }) {
   const [modalOpen, setModalOpen] = useState(null);
+  const [closePage, setClosePage] = useState(false);
   const version = useSetting("version");
   const applicationName = useSelector(getApplicationName);
   const { tag, date, ...versionExtra } = version;
@@ -118,7 +120,14 @@ function ProfileLink({
       {
         title: t`Sign out`,
         icon: null,
-        action: () => onLogout(),
+        action: () => {
+          const isFromOpen = window.opener !== null && window.opener !== window;
+          if (isFromOpen) {
+            window.close();
+          } else {
+            onLogout();
+          }
+        },
         event: `Navbar;Profile Dropdown;Logout`,
       },
     ].filter(Boolean);
@@ -201,6 +210,15 @@ function ProfileLink({
       {modalOpen === "diagnostic" && (
         <ErrorDiagnosticModalWrapper isModalOpen={true} onClose={closeModal} />
       )}
+      <ConfirmModal
+        opened={closePage}
+        title={t`确定注销?`}
+        content={t`注销将会关闭当前当前页面`}
+        onClose={() => setClosePage(false)}
+        onConfirm={async () => {
+          window.close()
+        }}
+      />
     </div>
   );
 }

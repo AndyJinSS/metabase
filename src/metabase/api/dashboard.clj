@@ -951,7 +951,7 @@
    [:caveats                 {:optional true} [:maybe :string]]
    [:points_of_interest      {:optional true} [:maybe :string]]
    [:show_in_getting_started {:optional true} [:maybe :boolean]]
-   [:enable_embedding        {:optional true} [:maybe :boolean]]
+   [:enable_embedding        {:optional true, :default true} [:maybe :boolean]]
    [:embedding_params        {:optional true} [:maybe ms/EmbeddingParams]]
    [:parameters              {:optional true} [:maybe [:sequential ms/Parameter]]]
    [:position                {:optional true} [:maybe ms/PositiveInt]]
