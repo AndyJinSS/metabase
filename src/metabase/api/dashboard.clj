@@ -129,6 +129,7 @@
   ;; if we're trying to save the new dashboard in a Collection make sure we have permissions to do that
   (collection/check-write-perms-for-collection collection_id)
   (let [dashboard-data {:name                name
+                        :enable_embedding    true
                         :description         description
                         :parameters          (or parameters [])
                         :creator_id          api/*current-user-id*
@@ -476,6 +477,7 @@
                         :description         (or description (:description existing-dashboard))
                         :parameters          (or (:parameters existing-dashboard) [])
                         :creator_id          api/*current-user-id*
+                        :enable_embedding    true
                         :collection_id       collection_id
                         :collection_position collection_position
                         :width               (:width existing-dashboard)}
